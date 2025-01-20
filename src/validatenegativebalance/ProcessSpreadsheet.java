@@ -35,11 +35,25 @@ public class ProcessSpreadsheet {
         String column = "PONTOS"; //Informa qual coluna procurar
 
         int pointsColumnIndex = findColumn(sheet, column); //Traz o índice da coluna pontos
-        List<Double> pointsValues = getPointsValues(pointsColumnIndex, sheet); //Pega os valores da coluna pontos
+        List<Double> pointsValues = getValues(pointsColumnIndex, sheet); //Pega os valores da coluna pontos
         List<Double> newColumnValues = calculatePointsToNewColumn(pointsValues); //Faz o acumulo de pontos
 
         //Grava o acumulo encontrato e cria uma nova planilha com a nova coluna
         writeDataToNewFile(filePath, inputStream, workbook, sheet, newColumnValues); 
+    }
+    
+    public List<Double> getColumnAcumulo(String filePath) throws FileNotFoundException, IOException{
+        // Carrega a planilha do Excel
+        FileInputStream inputStream = new FileInputStream(filePath);
+        Workbook workbook = new HSSFWorkbook(inputStream);
+        
+        Sheet sheet = workbook.getSheetAt(0); // Obtém a primeira linha
+        String column = "acumulo"; //Informa qual coluna procurar
+        int columnIndex = findColumn(sheet, column); //Traz o índice da coluna acumulo
+        
+        inputStream.close();
+        workbook.close();
+        return getValues(columnIndex, sheet); //Retorna uma lista    
     }
     
     private int findColumn(Sheet sheet, String column) throws FileNotFoundException, IOException {
@@ -62,7 +76,7 @@ public class ProcessSpreadsheet {
         return pointsColumnIndex;
     }
 
-    private List<Double> getPointsValues(int pointsColumnIndex, Sheet sheet) throws FileNotFoundException, IOException {
+    private List<Double> getValues(int pointsColumnIndex, Sheet sheet) throws FileNotFoundException, IOException {
 
         // Coletar os valores da coluna pontos
         List<Double> pointsValues = new ArrayList<>();

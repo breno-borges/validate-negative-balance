@@ -211,8 +211,13 @@ public class MainMenu extends javax.swing.JFrame {
     private void buttonStep2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStep2ActionPerformed
 
         if (processSpreadsheet.getNewPathSreadSheet() != null) {
-            Result result = new Result(this, true);
-            result.setVisible(true);
+            Result result;
+            try {
+                result = new Result(this, true, processSpreadsheet.getNewPathSreadSheet());
+                result.setVisible(true);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage());
+            }
         } else {
             JOptionPane.showMessageDialog(null, "O passo 1 precisa ser executado primeiro");
         }
