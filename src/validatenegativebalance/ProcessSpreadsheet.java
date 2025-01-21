@@ -30,67 +30,131 @@ public class ProcessSpreadsheet {
         // Carrega a planilha do Excel
         FileInputStream inputStream = new FileInputStream(filePath);
         Workbook workbook = new HSSFWorkbook(inputStream);
-        
+
         Sheet sheet = workbook.getSheetAt(0); // Obtém a primeira linha
         String column = "PONTOS"; //Informa qual coluna procurar
 
         int pointsColumnIndex = findColumn(sheet, column); //Traz o índice da coluna pontos
-        List<Double> pointsValues = getValues(pointsColumnIndex, sheet); //Pega os valores da coluna pontos
+        List<Double> pointsValues = getValuesNumerics(pointsColumnIndex, sheet); //Pega os valores da coluna pontos
         List<Double> newColumnValues = calculatePointsToNewColumn(pointsValues); //Faz o acumulo de pontos
 
         //Grava o acumulo encontrato e cria uma nova planilha com a nova coluna
-        writeDataToNewFile(filePath, inputStream, workbook, sheet, newColumnValues); 
+        writeDataToNewFile(filePath, inputStream, workbook, sheet, newColumnValues);
     }
-    
-    public List<Double> getColumnAcumulo(String filePath) throws FileNotFoundException, IOException{
+
+    public List<Double> getColumnAcumulo(String filePath) throws FileNotFoundException, IOException {
         // Carrega a planilha do Excel
         FileInputStream inputStream = new FileInputStream(filePath);
         Workbook workbook = new HSSFWorkbook(inputStream);
-        
+
         Sheet sheet = workbook.getSheetAt(0); // Obtém a primeira linha
         String column = "acumulo"; //Informa qual coluna procurar
         int columnIndex = findColumn(sheet, column); //Traz o índice da coluna acumulo
-        
+
         inputStream.close();
         workbook.close();
-        return getValues(columnIndex, sheet); //Retorna uma lista    
+        return getValuesNumerics(columnIndex, sheet); //Retorna uma lista    
+    }
+
+    public void validateNegativeColumnAcumulo(String filePath) throws IOException {
+        // Traz os valores das colunas que preciso para validação
+        List<Double> listAcumulate = getColumnAcumulo(filePath);
+        List<String> operations = getColumnOperacaoValues(filePath);
+        List<Double> transactions = getColumnTransacaoValues(filePath); // Tratar as transações
+        
+        
+        /*for (int i = transactions.size() - 1; i >= 0; i--) {
+            System.out.println(i + " pos " + transactions.get(i));
+        }
+        
+        
+        for (int i = listAcumulate.size() - 1; i >= 0; i--) {
+            
+            System.out.println(listAcumulate.get(i) + " pos " + i + " " + operations.get(i) + " " + transactions.get(i));
+        }*/
     }
     
-    private int findColumn(Sheet sheet, String column) throws FileNotFoundException, IOException {
+    private List<String> getColumnOperacaoValues(String filePath) throws FileNotFoundException, IOException{
+        // Carrega a planilha do Excel
+        FileInputStream inputStream = new FileInputStream(filePath);
+        Workbook workbook = new HSSFWorkbook(inputStream);
 
-        // Encontrar a coluna pontos
-        int pointsColumnIndex = -1;
-        Row headerRow = sheet.getRow(0);
-        for (Cell cell : headerRow) {
-            if (cell.getStringCellValue().equalsIgnoreCase(column)) {
-                pointsColumnIndex = cell.getColumnIndex();
-                break;
-            }
-        }
-
-        if (pointsColumnIndex == -1) {
-            JOptionPane.showMessageDialog(null, "Coluna não encontrada");
-            return 0;
-        }
-
-        return pointsColumnIndex;
+        Sheet sheet = workbook.getSheetAt(0); // Obtém a primeira linha
+        String column = "OPERACAO"; //Informa qual coluna procurar
+        int columnIndex = findColumn(sheet, column); //Traz o índice da coluna operacao
+        List<String> operations = getValuesText(columnIndex, sheet);
+        inputStream.close();
+        workbook.close();
+        
+        return operations;
     }
+    
+    private List<Double> getColumnTransacaoValues(String filePath) throws FileNotFoundException, IOException{
+        // Carrega a planilha do Excel
+        FileInputStream inputStream = new FileInputStream(filePath);
+        Workbook workbook = new HSSFWorkbook(inputStream);
 
-    private List<Double> getValues(int pointsColumnIndex, Sheet sheet) throws FileNotFoundException, IOException {
-
-        // Coletar os valores da coluna pontos
-        List<Double> pointsValues = new ArrayList<>();
+        Sheet sheet = workbook.getSheetAt(0); // Obtém a primeira linha
+        String column = "TRANSACAO"; //Informa qual coluna procurar
+        int columnIndex = findColumn(sheet, column); //Traz o índice da coluna transacao
+        List<Double> transactions = getValuesNumerics(columnIndex, sheet);
+        inputStream.close();
+        workbook.close();
+        
+        return transactions;
+    }
+    
+    private List<String> getValuesText(int columnIndex, Sheet sheet) throws FileNotFoundException, IOException{
+        // Coletar os valores da coluna a partir do indice
+        List<String> textValues = new ArrayList<>();
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             Row row = sheet.getRow(i);
             if (row != null) {
-                Cell pointsCell = row.getCell(pointsColumnIndex);
-                if (pointsCell != null && pointsCell.getCellType() == CellType.NUMERIC) {
-                    pointsValues.add(pointsCell.getNumericCellValue());
+                Cell textCell = row.getCell(columnIndex);
+                if (textCell != null && textCell.getCellType() == CellType.STRING) {
+                    textValues.add(textCell.getStringCellValue());
                 }
             }
         }
 
-        return pointsValues;
+        return textValues;
+    }
+
+    private int findColumn(Sheet sheet, String column) throws FileNotFoundException, IOException {
+
+        // Encontrar a coluna informada nos parametros
+        int columnIndex = -1;
+        Row headerRow = sheet.getRow(0);
+        for (Cell cell : headerRow) {
+            if (cell.getStringCellValue().equalsIgnoreCase(column)) {
+                columnIndex = cell.getColumnIndex();
+                break;
+            }
+        }
+
+        if (columnIndex == -1) {
+            JOptionPane.showMessageDialog(null, "Coluna não encontrada");
+            return 0;
+        }
+
+        return columnIndex;
+    }
+
+    private List<Double> getValuesNumerics(int pointsColumnIndex, Sheet sheet) throws FileNotFoundException, IOException {
+
+        // Coletar os valores da coluna a partir do indice
+        List<Double> numericValues = new ArrayList<>();
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row != null) {
+                Cell numericCell = row.getCell(pointsColumnIndex);
+                if (numericCell != null && numericCell.getCellType() == CellType.NUMERIC) {
+                    numericValues.add(numericCell.getNumericCellValue());
+                }
+            }
+        }
+
+        return numericValues;
     }
 
     private List<Double> calculatePointsToNewColumn(List<Double> pointsValues) throws FileNotFoundException, IOException {

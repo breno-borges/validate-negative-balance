@@ -28,19 +28,27 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="labelReason" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="labelTransaction" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="labelAction" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="textTransaction" pref="305" max="32767" attributes="0"/>
-                              <Component id="textReason" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="labelReason" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelAction" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="labelTransactions" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="textAction" alignment="1" min="-2" pref="305" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="labelBalance" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="textTransaction" pref="314" max="32767" attributes="0"/>
+                          <Component id="textReason" max="32767" attributes="0"/>
+                          <Component id="textAction" alignment="0" max="32767" attributes="0"/>
+                          <Component id="textBalance" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -48,7 +56,7 @@
                       <Component id="lableTitle" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="69" max="32767" attributes="0"/>
+              <EmptySpace pref="39" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -64,15 +72,20 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelTransaction" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="textTransaction" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="textAction" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelAction" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelAction" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="textAction" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="textTransaction" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelTransactions" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="41" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelBalance" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="textBalance" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="25" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -88,9 +101,9 @@
         <Property name="text" type="java.lang.String" value="Motivo:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="labelTransaction">
+    <Component class="javax.swing.JLabel" name="labelTransactions">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Transa&#xe7;&#xe3;o:"/>
+        <Property name="text" type="java.lang.String" value="Transa&#xe7;&#xf5;es"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelAction">
@@ -109,6 +122,16 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="textAction">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelBalance">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Saldo de pontos:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="textBalance">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
