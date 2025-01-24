@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -42,6 +43,78 @@ public class ProcessSpreadsheet {
         writeDataToNewFile(filePath, inputStream, workbook, sheet, newColumnValues);
     }
 
+    public Validation validateNegativeColumnAcumulo(String filePath) throws IOException {
+        // Traz os valores das colunas que preciso para validação
+        List<Double> listAcumulate = getColumnAcumulo(filePath);
+        List<String> operations = getColumnOperacaoValues(filePath);
+        List<Double> transactions = getColumnTransacaoValues(filePath);
+        List<Double> points = getColumnPointsValues(filePath);
+        int indexNegativeValueFounded = findNegativeBalance(filePath);
+
+        DecimalFormat decimalFormat = new DecimalFormat("#"); // Converte a notação cientifica
+
+        // Pensar em uma forma de exibir todas as transações
+        return new Validation(listAcumulate.get(indexNegativeValueFounded),
+                operations.get(indexNegativeValueFounded),
+                decimalFormat.format(transactions.get(indexNegativeValueFounded)),
+                points.get(indexNegativeValueFounded));
+    }
+
+    private int findNegativeBalance(String filePath) throws IOException {
+        List<Double> listAcumulate = getColumnAcumulo(filePath);
+        List<String> operations = getColumnOperacaoValues(filePath);
+        List<Double> points = getColumnPointsValues(filePath);
+        int indexNegativeValueFounded = -1;
+        int count = listAcumulate.size() - 1;
+
+        
+        // Verificar condição para repetir loop e para quebrar o loop
+        while (count >= 0) {
+            // Encontrar valor negativo na coluna acumulo desde que os pontos não sejam estorno de credito
+            for (int i = listAcumulate.size() - 1; i >= 0; i--) { // Começa da última linha e ignora o cabeçalho
+                if (listAcumulate.get(i) < 0 && !operations.get(i).equals("ESTORNO DE CRÉDITO")) {
+                    indexNegativeValueFounded = i;
+                    break;
+                }
+            }
+            
+            //Verifica a sequencia da lista após o primeiro negativo 
+            for (int i = indexNegativeValueFounded - 1; i >= 0; i--) { // Começa ddo próximo índice após encontrar o negativo
+                // Verifica se houve algum estorno do valor negativo encontrado
+                if (points.get(i) == (points.get(indexNegativeValueFounded) * -1)
+                        && operations.get(i).equals("ESTORNO DE CRÉDITO")
+                        || operations.get(i).equals("ESTORNO DE EXPIRAÇÃO")) {
+
+                    // Simula a transformação da coluna PONTOS em zero
+                    List<Double> newBalance = reloadBalance(listAcumulate, points, i);
+
+                    // Verifica se o saldo ficará positivo após a simulação
+                    if (newBalance.get(i) >= 0) {
+                        return i; // Retorna o índice da linha onde a pessoa ficou com saldo negativo
+                    }
+
+                }
+            }
+            // Verificar
+            count++;
+            return -1; // Retorna -1 se não encontrar nenhuma linha que se encaixe nas situações
+        }
+        // Verificar
+        return 0;
+    }
+
+    private List<Double> reloadBalance(List<Double> acumulate, List<Double> points, int index) {
+        List<Double> newBalance = new ArrayList<>(acumulate); // Cria uma cópia do List acumulo para simulação
+        newBalance.set(index, newBalance.get(index) - points.get(index)); // Zera o valor da coluna PONTOS na linha especificada
+
+        // Recalcula o acumulo a partir do índice modificado até o início
+        for (int i = index - 1; i >= 0; i--) {
+            newBalance.set(i, newBalance.get(i + 1) + points.get(i));
+        }
+
+        return newBalance;
+    }
+
     public List<Double> getColumnAcumulo(String filePath) throws FileNotFoundException, IOException {
         // Carrega a planilha do Excel
         FileInputStream inputStream = new FileInputStream(filePath);
@@ -56,25 +129,7 @@ public class ProcessSpreadsheet {
         return getValuesNumerics(columnIndex, sheet); //Retorna uma lista    
     }
 
-    public void validateNegativeColumnAcumulo(String filePath) throws IOException {
-        // Traz os valores das colunas que preciso para validação
-        List<Double> listAcumulate = getColumnAcumulo(filePath);
-        List<String> operations = getColumnOperacaoValues(filePath);
-        List<Double> transactions = getColumnTransacaoValues(filePath); // Tratar as transações
-        
-        
-        /*for (int i = transactions.size() - 1; i >= 0; i--) {
-            System.out.println(i + " pos " + transactions.get(i));
-        }
-        
-        
-        for (int i = listAcumulate.size() - 1; i >= 0; i--) {
-            
-            System.out.println(listAcumulate.get(i) + " pos " + i + " " + operations.get(i) + " " + transactions.get(i));
-        }*/
-    }
-    
-    private List<String> getColumnOperacaoValues(String filePath) throws FileNotFoundException, IOException{
+    private List<String> getColumnOperacaoValues(String filePath) throws FileNotFoundException, IOException {
         // Carrega a planilha do Excel
         FileInputStream inputStream = new FileInputStream(filePath);
         Workbook workbook = new HSSFWorkbook(inputStream);
@@ -85,11 +140,11 @@ public class ProcessSpreadsheet {
         List<String> operations = getValuesText(columnIndex, sheet);
         inputStream.close();
         workbook.close();
-        
+
         return operations;
     }
-    
-    private List<Double> getColumnTransacaoValues(String filePath) throws FileNotFoundException, IOException{
+
+    private List<Double> getColumnTransacaoValues(String filePath) throws FileNotFoundException, IOException {
         // Carrega a planilha do Excel
         FileInputStream inputStream = new FileInputStream(filePath);
         Workbook workbook = new HSSFWorkbook(inputStream);
@@ -100,11 +155,26 @@ public class ProcessSpreadsheet {
         List<Double> transactions = getValuesNumerics(columnIndex, sheet);
         inputStream.close();
         workbook.close();
-        
+
         return transactions;
     }
-    
-    private List<String> getValuesText(int columnIndex, Sheet sheet) throws FileNotFoundException, IOException{
+
+    private List<Double> getColumnPointsValues(String filePath) throws FileNotFoundException, IOException {
+        // Carrega a planilha do Excel
+        FileInputStream inputStream = new FileInputStream(filePath);
+        Workbook workbook = new HSSFWorkbook(inputStream);
+
+        Sheet sheet = workbook.getSheetAt(0); // Obtém a primeira linha
+        String column = "PONTOS"; //Informa qual coluna procurar
+        int columnIndex = findColumn(sheet, column); //Traz o índice da coluna pontos
+        List<Double> points = getValuesNumerics(columnIndex, sheet);
+        inputStream.close();
+        workbook.close();
+
+        return points;
+    }
+
+    private List<String> getValuesText(int columnIndex, Sheet sheet) throws FileNotFoundException, IOException {
         // Coletar os valores da coluna a partir do indice
         List<String> textValues = new ArrayList<>();
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {

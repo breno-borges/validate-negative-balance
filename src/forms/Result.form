@@ -28,35 +28,36 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="labelReason" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="labelAction" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="labelTransactions" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="labelBalance" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="labelReason" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelAction" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelTransactions" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="textTransaction" pref="314" max="32767" attributes="0"/>
-                          <Component id="textReason" max="32767" attributes="0"/>
-                          <Component id="textAction" alignment="0" max="32767" attributes="0"/>
-                          <Component id="textBalance" alignment="0" max="32767" attributes="0"/>
-                      </Group>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="204" max="-2" attributes="0"/>
-                      <Component id="lableTitle" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="labelNewBalance" min="-2" max="-2" attributes="0"/>
+                          <Component id="labelCurrentlyBalance" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="39" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="textReason" max="32767" attributes="0"/>
+                  <Component id="textAction" alignment="0" max="32767" attributes="0"/>
+                  <Component id="textTransaction" alignment="0" max="32767" attributes="0"/>
+                  <Component id="textCurrentylBalance" alignment="0" max="32767" attributes="0"/>
+                  <Component id="textNewBalance" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="0" pref="234" max="32767" attributes="0"/>
+              <Component id="lableTitle" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="227" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -82,10 +83,15 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelBalance" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="textBalance" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="labelCurrentlyBalance" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="textCurrentylBalance" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="25" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="labelNewBalance" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="textNewBalance" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="28" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -126,12 +132,22 @@
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="labelBalance">
+    <Component class="javax.swing.JLabel" name="labelCurrentlyBalance">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Saldo de pontos:"/>
+        <Property name="text" type="java.lang.String" value="Saldo Atual:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="textBalance">
+    <Component class="javax.swing.JTextField" name="textCurrentylBalance">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="labelNewBalance">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Saldo ap&#xf3;s a&#xe7;&#xe3;o:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="textNewBalance">
       <Properties>
         <Property name="editable" type="boolean" value="false"/>
       </Properties>
