@@ -169,7 +169,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="labelDevelopedBy">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Desenvolvido por Breno Borges&#xae; - BOP"/>
+            <Property name="text" type="java.lang.String" value="Criado e Desenvolvido por Breno Borges&#xae; - BOP"/>
           </Properties>
         </Component>
       </SubComponents>

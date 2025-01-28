@@ -10,12 +10,17 @@ public class Validation {
     private String operation;
     private String transaction;
     private double point;
+    private int index;
 
-    public Validation(double acumulate, String operation, String transaction, double point) {
+    public Validation() {
+    }
+
+    public Validation(double acumulate, String operation, String transaction, double point, int index) {
         this.acumulate = acumulate;
         this.operation = operation;
         this.transaction = transaction;
         this.point = point;
+        this.index = index;
     }
 
     public double getAcumulate() {
@@ -32,6 +37,10 @@ public class Validation {
 
     public double getPoint() {
         return point;
+    }
+
+    public int getIndex() {
+        return index;
     }
     
     

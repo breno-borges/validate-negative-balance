@@ -57,7 +57,8 @@ public class ProcessSpreadsheet {
         return new Validation(listAcumulate.get(indexNegativeValueFounded),
                 operations.get(indexNegativeValueFounded),
                 decimalFormat.format(transactions.get(indexNegativeValueFounded)),
-                points.get(indexNegativeValueFounded));
+                points.get(indexNegativeValueFounded),
+                indexNegativeValueFounded);
     }
 
     private int findNegativeBalance(String filePath) throws IOException {

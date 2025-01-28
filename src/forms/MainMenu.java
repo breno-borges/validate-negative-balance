@@ -78,7 +78,7 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
 
-        labelDevelopedBy.setText("Desenvolvido por Breno Borges® - BOP");
+        labelDevelopedBy.setText("Criado e Desenvolvido por Breno Borges® - BOP");
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
