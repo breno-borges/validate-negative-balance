@@ -65,42 +65,46 @@ public class ProcessSpreadsheet {
         List<String> operations = getColumnOperacaoValues(filePath);
         List<Double> points = getColumnPointsValues(filePath);
         int indexNegativeValueFounded = -1;
-        int count = listAcumulate.size() - 1;
+        int index = listAcumulate.size() - 1;
+        boolean foundNegativeWithoutRefund = false;
 
-        
         // Verificar condição para repetir loop e para quebrar o loop
-        while (count >= 0) {
-            // Encontrar valor negativo na coluna acumulo desde que os pontos não sejam estorno de credito
-            for (int i = listAcumulate.size() - 1; i >= 0; i--) { // Começa da última linha e ignora o cabeçalho
+        while (!foundNegativeWithoutRefund) {
+            // Encontrar valor negativo na coluna acumulo desde que a operação não sejam estorno de credito
+            for (int i = index; i >= 0; i--) { // Começa da última linha e ignora o cabeçalho
                 if (listAcumulate.get(i) < 0 && !operations.get(i).equals("ESTORNO DE CRÉDITO")) {
                     indexNegativeValueFounded = i;
                     break;
                 }
             }
-            
-            //Verifica a sequencia da lista após o primeiro negativo 
+
+            //Verifica a sequencia da lista após o primeiro valor negativo
+            boolean hasRefund = false;
             for (int i = indexNegativeValueFounded - 1; i >= 0; i--) { // Começa ddo próximo índice após encontrar o negativo
                 // Verifica se houve algum estorno do valor negativo encontrado
                 if (points.get(i) == (points.get(indexNegativeValueFounded) * -1)
                         && operations.get(i).equals("ESTORNO DE CRÉDITO")
                         || operations.get(i).equals("ESTORNO DE EXPIRAÇÃO")) {
-
-                    // Simula a transformação da coluna PONTOS em zero
-                    List<Double> newBalance = reloadBalance(listAcumulate, points, i);
-
-                    // Verifica se o saldo ficará positivo após a simulação
-                    if (newBalance.get(i) >= 0) {
-                        return i; // Retorna o índice da linha onde a pessoa ficou com saldo negativo
-                    }
-
+                    hasRefund = true;
+                    index = i - 1;
                 }
             }
-            // Verificar
-            count++;
-            return -1; // Retorna -1 se não encontrar nenhuma linha que se encaixe nas situações
+            
+            // Verifica se não houve estorno do valor negativo encontrado
+            if (!hasRefund) {
+                for (int i = indexNegativeValueFounded - 1; i >= 0; i--) {
+                    foundNegativeWithoutRefund = false;
+                    // Simula a transformação da coluna PONTOS em zero
+                    List<Double> newBalance = reloadBalance(listAcumulate, points, indexNegativeValueFounded);
+
+                    // Verifica se o saldo ficará positivo após a simulação
+                    if (newBalance.getFirst() >= 0) {
+                        return indexNegativeValueFounded; // Retorna o índice da linha onde a pessoa ficou com saldo negativo
+                    }
+                }
+            }
         }
-        // Verificar
-        return 0;
+        return -1; // Retorna -1 se não encontrar nenhuma linha que se encaixe nas situações
     }
 
     private List<Double> reloadBalance(List<Double> acumulate, List<Double> points, int index) {
