@@ -7,7 +7,8 @@ package forms;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.JOptionPane;
-import validatenegativebalance.ProcessSpreadsheet;
+import validatenegativebalance.GetColumn;
+import validatenegativebalance.ResultField;
 import validatenegativebalance.Validation;
 
 /**
@@ -25,7 +26,6 @@ public class Result extends javax.swing.JDialog {
     }
 
     private String filePath;
-    private ProcessSpreadsheet processSpreadsheet = new ProcessSpreadsheet();
 
     /**
      * Creates new form Result
@@ -43,7 +43,7 @@ public class Result extends javax.swing.JDialog {
     }
 
     private void validation() throws IOException {
-        List<Double> listAcumulate = processSpreadsheet.getColumnAcumulo(filePath);
+        List<Double> listAcumulate = GetColumn.getColumnAcumuloValues(filePath);
 
         if (listAcumulate.getFirst() == 0) {
             textAction.setText("Nenhuma ação necessária");
@@ -58,7 +58,7 @@ public class Result extends javax.swing.JDialog {
             textNewBalance.setText(listAcumulate.getFirst().toString());
             textCurrentylBalance.setText(listAcumulate.getFirst().toString());
         } else {
-            Validation validation = processSpreadsheet.validateNegativeColumnAcumulo(filePath);
+            ResultField validation = Validation.validateNegativeColumnAcumulo(filePath);
 
             if (validation.getIndex() == -1) {
                 JOptionPane.showMessageDialog(null, "Situação não mapeada! Entre em contato com o desenvolvedor!");
