@@ -36,7 +36,7 @@ public class ProcessSpreadsheet {
             workbook = new XSSFWorkbook(inputStream);
         }
         
-        List<Double> newColumnValues = calculatePointsToNewColumn(GetColumn.getColumnPointsValues(filePath)); //Faz o acumulo de pontos
+        List<Double> newColumnValues = calculatePointsToNewColumn(GetColumnValue.getColumnPointsValues(filePath)); //Faz o acumulo de pontos
 
         //Grava o acumulo encontrato e cria uma nova planilha com a nova coluna
         writeDataToNewFile(filePath, inputStream, workbook, newColumnValues);

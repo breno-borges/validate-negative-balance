@@ -10,36 +10,21 @@ import java.util.List;
  * @author breno.santos.o2b_dot
  */
 public class Validation {
-    
-    
-    public static ResultField validateNegativeColumnAcumulo(String filePath) throws IOException {
-        // Traz os valores das colunas que preciso para validação
-        List<Double> listAcumulate = GetColumn.getColumnAcumuloValues(filePath);
-        List<String> operations = GetColumn.getColumnOperacaoValues(filePath);
-        List<Double> transactions = GetColumn.getColumnTransacaoValues(filePath);
-        List<Double> points = GetColumn.getColumnPointsValues(filePath);
-        int indexNegativeValueFound = findNegativeBalance(filePath);
 
-        DecimalFormat decimalFormat = new DecimalFormat("#");
-
-        // Pensar em uma forma de exibir todas as transações
-        return new ResultField(listAcumulate.get(indexNegativeValueFound),
-                operations.get(indexNegativeValueFound),
-                decimalFormat.format(transactions.get(indexNegativeValueFound)),
-                points.get(indexNegativeValueFound),
-                indexNegativeValueFound);
-    }
-
-    private static int findNegativeBalance(String filePath) throws IOException {
-        List<Double> listAcumulate = GetColumn.getColumnAcumuloValues(filePath);
-        List<String> operations = GetColumn.getColumnOperacaoValues(filePath);
-        List<Double> points = GetColumn.getColumnPointsValues(filePath);
+    public List<ResultField> validateNegativeBalance(String filePath) throws IOException {
+        List<Double> listAcumulate = GetColumnValue.getColumnAcumuloValues(filePath);
+        List<String> operations = GetColumnValue.getColumnOperacaoValues(filePath);
+        List<Double> points = GetColumnValue.getColumnPointsValues(filePath);
+        List<Double> transactions = GetColumnValue.getColumnTransacaoValues(filePath);
         int indexNegativeValueFound = -1;
         int index = listAcumulate.size() - 1;
-        boolean foundNegativeWithoutRefund = false;
+        boolean positiveBalance = false;
 
-        // Verificar condição para repetir loop e para quebrar o loop
-        while (!foundNegativeWithoutRefund) {
+        ReloadBalance reloadBalance = new ReloadBalance(listAcumulate);
+        List<ResultField> results = new ArrayList<>();
+        DecimalFormat decimalFormat = new DecimalFormat("#");
+        
+        while (!positiveBalance) {
             // Encontrar valor negativo na coluna acumulo desde que a operação não sejam estorno de credito
             for (int i = index; i >= 0; i--) { // Começa da última linha e ignora o cabeçalho
                 if (listAcumulate.get(i) < 0 && !operations.get(i).equals("ESTORNO DE CRÉDITO")) {
@@ -58,40 +43,45 @@ public class Validation {
                     hasRefund = true;
                     index = i - 1;
                     break;
-                } else if(operations.get(indexNegativeValueFound).equals("TRANSFERÊNCIA")
-                        && points.get(indexNegativeValueFound) == (points.get(indexNegativeValueFound + 2) * -1)){
-                    hasRefund = true;
-                    index = i - 1;
-                    break;
                 }
+            }
+
+            if (operations.get(indexNegativeValueFound).equals("TRANSFERÊNCIA")
+                    && points.get(indexNegativeValueFound) == (points.get(indexNegativeValueFound + 2) * -1)) {
+                hasRefund = true;
+                index = indexNegativeValueFound - 1;
             }
 
             // Verifica se não houve estorno do valor negativo encontrado
             if (!hasRefund) {
-                for (int i = indexNegativeValueFound - 1; i >= 0; i--) {
-                    foundNegativeWithoutRefund = false;
-                    // Simula a transformação da coluna PONTOS em zero
-                    List<Double> newBalance = reloadBalance(listAcumulate, points, indexNegativeValueFound);
-                    
-                    // Verifica se o saldo ficará positivo após a simulação
-                    if (newBalance.getFirst() >= 0) {
-                        return indexNegativeValueFound; // Retorna o índice da linha onde a pessoa ficou com saldo negativo
-                    }
+                
+                // Simula a transformação da coluna PONTOS em zero
+                List<Double> newBalance = reloadBalance.reloadBalance(points, indexNegativeValueFound);
+                
+                // Verifica se o saldo ficará positivo após a simulação
+                if (newBalance.getFirst() >= 0) {
+                    ResultField resultField = new ResultField.Builder()
+                            .index(indexNegativeValueFound)
+                            .operation(operations.get(indexNegativeValueFound))
+                            .transaction(decimalFormat.format(transactions.get(indexNegativeValueFound)))
+                            .acumulate(listAcumulate.get(indexNegativeValueFound))
+                            .point(points.get(indexNegativeValueFound))
+                            .build();
+                    results.add(resultField);
+                    return results; // Retorna um array com o que deixou a pessoa com saldo negativo
+                } else {
+                    ResultField resultField = new ResultField.Builder()
+                            .index(indexNegativeValueFound)
+                            .operation(operations.get(indexNegativeValueFound))
+                            .transaction(decimalFormat.format(transactions.get(indexNegativeValueFound)))
+                            .acumulate(listAcumulate.get(indexNegativeValueFound))
+                            .point(points.get(indexNegativeValueFound))
+                            .build();
+                    results.add(resultField);
+                    index = indexNegativeValueFound - 1;
                 }
             }
         }
-        return -1; // Retorna -1 se não encontrar nenhuma linha que se encaixe nas situações
-    }
-    
-    private static List<Double> reloadBalance(List<Double> acumulate, List<Double> points, int index) {
-        List<Double> newBalance = new ArrayList<>(acumulate); // Cria uma cópia do List acumulo para simulação
-        newBalance.set(index, newBalance.get(index) - points.get(index)); // Zera o valor da coluna PONTOS na linha especificada
-
-        // Recalcula o acumulo a partir do índice modificado até o início
-        for (int i = index - 1; i >= 0; i--) {
-            newBalance.set(i, newBalance.get(i + 1) + points.get(i));
-        }
-
-        return newBalance;
+        return null; // Retorna null se não encontrar nenhuma linha que se encaixe nas situações
     }
 }

@@ -74,31 +74,31 @@
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="labelDevelopedBy" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="labelVersion" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
+                          <Component id="labelTitle" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="120" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="118" max="-2" attributes="0"/>
-                                  <Component id="labelTitle" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="labelStep1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="labelStep2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="labelStep1" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="labelStep2" alignment="1" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="buttonStep1" max="32767" attributes="0"/>
-                                      <Component id="buttonStep2" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="buttonStep1" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="buttonStep2" alignment="1" min="-2" pref="117" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="labelDevelopedBy" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace min="0" pref="60" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="labelVersion" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -143,7 +143,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="labelStep1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Passo 1 - Escolher a planilha XLS:"/>
+            <Property name="text" type="java.lang.String" value="Passo 1 - Escolher Arquivo:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="buttonStep1">

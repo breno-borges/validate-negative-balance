@@ -13,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * @author breno.santos.o2b_dot
  */
-public class GetColumn {
+public class GetColumnValue {
     private static Workbook workbook;
     
     public static List<Double> getColumnAcumuloValues(String filePath) throws FileNotFoundException, IOException {

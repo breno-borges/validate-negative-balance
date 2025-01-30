@@ -60,7 +60,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         labelVersion.setText("V 1.0");
 
-        labelStep1.setText("Passo 1 - Escolher a planilha XLS:");
+        labelStep1.setText("Passo 1 - Escolher Arquivo:");
 
         buttonStep1.setText("Escolher arquivo");
         buttonStep1.addActionListener(new java.awt.event.ActionListener() {
@@ -87,25 +87,25 @@ public class MainMenu extends javax.swing.JFrame {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(labelDevelopedBy)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelVersion))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(118, 118, 118)
+                        .addComponent(labelTitle)
+                        .addGap(0, 120, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGap(118, 118, 118)
-                                .addComponent(labelTitle))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelStep1)
-                                    .addComponent(labelStep2))
+                                    .addComponent(labelStep1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(labelStep2, javax.swing.GroupLayout.Alignment.TRAILING))
                                 .addGap(18, 18, 18)
-                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(buttonStep1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(buttonStep2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(0, 60, Short.MAX_VALUE)))
+                                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(buttonStep1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(buttonStep2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(labelDevelopedBy)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelVersion)))
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
