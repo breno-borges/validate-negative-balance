@@ -59,7 +59,7 @@ public class Validation {
                 List<Double> newBalance = reloadBalance.reloadBalance(points, indexNegativeValueFound);
                 
                 // Verifica se o saldo ficará positivo após a simulação
-                if (newBalance.getFirst() >= 0) {
+                if (newBalance.get(0) >= 0) {
                     ResultField resultField = new ResultField.Builder()
                             .index(indexNegativeValueFound)
                             .operation(operations.get(indexNegativeValueFound))

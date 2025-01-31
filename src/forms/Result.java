@@ -47,20 +47,20 @@ public class Result extends javax.swing.JDialog {
     private void result() throws IOException {
         List<Double> listAcumulate = GetColumnValue.getColumnAcumuloValues(filePath);
 
-        if (listAcumulate.getFirst() == 0) {
+        if (listAcumulate.get(0) == 0) {
             textReasons.setText("Saldo já está zerado");
             textActions.setText("Nenhuma ação necessária");
             textTransactions.setText("Saldo já está zerado");
             textFile500.setText("Saldo já está zerado");
-            textCurrentylBalance.setText(listAcumulate.getFirst().toString());
-            textNewBalance.setText(listAcumulate.getFirst().toString());
-        } else if (listAcumulate.getFirst() > 0) {
+            textCurrentylBalance.setText(listAcumulate.get(0).toString());
+            textNewBalance.setText(listAcumulate.get(0).toString());
+        } else if (listAcumulate.get(0) > 0) {
             textReasons.setText("Saldo já é positivo");
             textActions.setText("Nenhuma ação necessária");
             textTransactions.setText("Saldo já é positivo");
             textFile500.setText("Saldo já é positivo");
-            textNewBalance.setText(listAcumulate.getFirst().toString());
-            textCurrentylBalance.setText(listAcumulate.getFirst().toString());
+            textNewBalance.setText(listAcumulate.get(0).toString());
+            textCurrentylBalance.setText(listAcumulate.get(0).toString());
         } else {
             Validation validation = new Validation();
             List<ResultField> results = validation.validateNegativeBalance(filePath);
@@ -102,24 +102,24 @@ public class Result extends javax.swing.JDialog {
                 if (uniqueOperations.size() == 1 && uniqueOperations.contains("EXPIRAÇÃO")){
                     textActions.setText("Reverter as transações abaixo");
                     textFile500.setText("Não se aplica");
-                    newBalance = sumExpiredPoints + listAcumulate.getFirst();
+                    newBalance = sumExpiredPoints + listAcumulate.get(0);
                     textNewBalance.setText(newBalance.toString());
                 } else if(uniqueOperations.size() > 1 && uniqueOperations.contains("EXPIRAÇÃO")) {
                     textActions.setText("Reverter as transações abaixo e fazer arquivo 500");
-                    file500 = listAcumulate.getFirst() - (sumExpiredPoints + listAcumulate.getFirst());
+                    file500 = listAcumulate.get(0) - (sumExpiredPoints + listAcumulate.get(0));
                     textFile500.setText(file500.toString());
-                    newBalance = sumExpiredPoints + file500 + listAcumulate.getFirst();
+                    newBalance = sumExpiredPoints + file500 + listAcumulate.get(0);
                     textNewBalance.setText(newBalance.toString());
                 } else {
                     textActions.setText("Fazer arquivo 500 para bonificar o cliente");
-                    file500 = listAcumulate.getFirst() * -1;
+                    file500 = listAcumulate.get(0) * -1;
                     textFile500.setText(file500.toString());
                     textTransactions.setText("Não se aplica");
-                    newBalance = file500 + listAcumulate.getFirst();
+                    newBalance = file500 + listAcumulate.get(0);
                     textNewBalance.setText(newBalance.toString());
                 }
                 
-                textCurrentylBalance.setText(listAcumulate.getFirst().toString());
+                textCurrentylBalance.setText(listAcumulate.get(0).toString());
             }
         }
     }
