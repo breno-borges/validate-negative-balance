@@ -53,14 +53,14 @@ public class Result extends javax.swing.JDialog {
             textTransactions.setText("Saldo já está zerado");
             textFile500.setText("Saldo já está zerado");
             textCurrentylBalance.setText(listAcumulate.get(0).toString());
-            textNewBalance.setText(listAcumulate.get(0).toString());
+            textNewBalance.setText("Não aplicável");
         } else if (listAcumulate.get(0) > 0) {
             textReasons.setText("Saldo já é positivo");
             textActions.setText("Nenhuma ação necessária");
             textTransactions.setText("Saldo já é positivo");
             textFile500.setText("Saldo já é positivo");
-            textNewBalance.setText(listAcumulate.get(0).toString());
             textCurrentylBalance.setText(listAcumulate.get(0).toString());
+            textNewBalance.setText("Não aplicável");
         } else {
             Validation validation = new Validation();
             List<ResultField> results = validation.validateNegativeBalance(filePath);
