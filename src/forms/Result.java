@@ -161,7 +161,7 @@ public class Result extends javax.swing.JDialog {
 
         textReasons.setEditable(false);
 
-        labelActionTitle.setText("Ações a Serem Tomadas");
+        labelActionTitle.setText("Ações Recomendadas");
 
         labelActions.setText("Ações:");
 

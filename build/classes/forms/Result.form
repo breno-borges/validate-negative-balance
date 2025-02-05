@@ -153,7 +153,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="labelActionTitle">
       <Properties>
-        <Property name="text" type="java.lang.String" value="A&#xe7;&#xf5;es a Serem Tomadas"/>
+        <Property name="text" type="java.lang.String" value="A&#xe7;&#xf5;es Recomendadas"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="labelActions">

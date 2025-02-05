@@ -179,7 +179,7 @@ public class MainMenu extends javax.swing.JFrame {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Procurar Planilha");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos do Microsoft Excel", "xls", "xlsx");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos do Microsoft Excel e CSV", "xls", "xlsx", "csv");
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setCurrentDirectory(new File("C:\\"));
         fileChooser.setFileFilter(filter);
