@@ -58,7 +58,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         labelTitle.setText("Validador de saldos negativos");
 
-        labelVersion.setText("V 1.0");
+        labelVersion.setText("V 1.1");
 
         labelStep1.setText("Passo 1 - Escolher Arquivo:");
 

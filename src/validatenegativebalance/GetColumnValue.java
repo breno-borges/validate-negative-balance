@@ -25,7 +25,7 @@ public class GetColumnValue {
         List<Double> listAcumulate;
 
         if (filePath.endsWith(".csv")) {
-            listAcumulate = getColumnNumericsValueCSV(filePath, 14);
+            listAcumulate = getColumnNumericsValueCSV(filePath, 3);
         } else {
             // Carrega a planilha do Excel
             FileInputStream inputStream = new FileInputStream(filePath);
@@ -121,13 +121,40 @@ public class GetColumnValue {
         List<Double> values = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
+            String valueString;
+            double value = 0.0;
             while ((line = br.readLine()) != null) {
                 String[] valuesSplit = line.split(",");
                 if (valuesSplit.length > index) {
                     try {
-                        // Remove as aspas duplas antes da conversão
-                        String valueString = valuesSplit[index].trim().replace("\"", "");
-                        double value = Double.parseDouble(valueString);
+                        if (valuesSplit.length == 13 && index == 7) {
+                            // Remove as aspas duplas antes da conversão
+                            valueString = valuesSplit[index].trim().replace("\"", "");
+                            value = Double.parseDouble(valueString);
+                        } else if (valuesSplit.length == 14 && index == 7) {
+                            valueString = valuesSplit[index].trim().replace("\"", "");
+                            if (valueString.equalsIgnoreCase("TROCA")
+                                    || valueString.equalsIgnoreCase("CRÉDITO")
+                                    || valueString.equalsIgnoreCase("TRANSFERÊNCIA")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE CRÉDITO")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE EXPIRAÇÃO")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE VENCIMENTO")) {
+                                valueString = valuesSplit[index + 1].trim().replace("\"", "");
+                                value = Double.parseDouble(valueString);
+                            } else {
+                                valueString = valuesSplit[index].trim().replace("\"", "");
+                                value = Double.parseDouble(valueString);
+                            }
+                        } else if(index == 1) {
+                            // Remove as aspas duplas antes da conversão
+                            valueString = valuesSplit[index].trim().replace("\"", "");
+                            valueString = valueString.replace("EXT", "");
+                            value = Double.parseDouble(valueString);
+                        } else {
+                            // Remove as aspas duplas antes da conversão
+                            valueString = valuesSplit[index].trim().replace("\"", "");
+                            value = Double.parseDouble(valueString);
+                        }
                         values.add(value);
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Erro ao converter valor para número na linha: " + line);
@@ -145,13 +172,20 @@ public class GetColumnValue {
         List<String> values = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
+            String valueString;
             while ((line = br.readLine()) != null) {
                 String[] valuesSplit = line.split(",");
                 if (valuesSplit.length > index) {
                     try {
-                        // Remove as aspas duplas antes da conversão
-                        String value = valuesSplit[index].trim().replace("\"", "");
-                        values.add(value);
+                        if (valuesSplit.length == 13) {
+                            valueString = valuesSplit[index].trim().replace("\"", "");
+                        } else {
+                            valueString = valuesSplit[index].trim().replace("\"", "");
+                            if (valueString.contains("00")) {
+                                valueString = valuesSplit[index + 1].trim().replace("\"", "");
+                            }
+                        }
+                        values.add(valueString);
                     } catch (NumberFormatException e) {
                         JOptionPane.showMessageDialog(null, "Erro ao converter valor para número na linha: " + line);
                         return null;

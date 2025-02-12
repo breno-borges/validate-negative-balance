@@ -1,10 +1,8 @@
 package validatenegativebalance;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,12 +30,9 @@ public class ProcessSpreadsheet {
 
     public void processSpreadsheet(String filePath) throws FileNotFoundException, IOException {
 
-        List<Double> newColumnValues;
-
+        
         if (filePath.endsWith(".csv")) {
-            newColumnValues = calculatePointsToNewColumn(GetColumnValue.getColumnPointsValues(filePath));
-            writeCsv(filePath, newColumnValues);
-
+            writeCsv(filePath);
         } else {
             // Carrega a planilha do Excel
             FileInputStream inputStream = new FileInputStream(filePath);
@@ -47,7 +42,7 @@ public class ProcessSpreadsheet {
                 workbook = new XSSFWorkbook(inputStream);
             }
 
-            newColumnValues = calculatePointsToNewColumn(GetColumnValue.getColumnPointsValues(filePath)); //Faz o acumulo de pontos
+            List<Double> newColumnValues = calculatePointsToNewColumn(GetColumnValue.getColumnPointsValues(filePath)); //Faz o acumulo de pontos
 
             //Grava o acumulo encontrato e cria uma nova planilha com a nova coluna
             writeXlsOrXlsx(filePath, inputStream, workbook, newColumnValues);
@@ -69,28 +64,32 @@ public class ProcessSpreadsheet {
         return newColumnValues;
     }
 
-    private void writeCsv(String filePath, List<Double> newColumnValues) throws IOException {
+    private void writeCsv(String filePath) throws IOException {
         this.newPathSreadSheet = filePath.replace(".csv", "").concat("_processado.csv");
-
+        
+        List<Double> transactions = GetColumnValue.getColumnTransacaoValues(filePath);
+        List<String> operations = GetColumnValue.getColumnOperacaoValues(filePath);
+        List<Double> points = GetColumnValue.getColumnPointsValues(filePath);
+        List<Double> newColumnValues = calculatePointsToNewColumn(points);
+        
         // Abre o arquivo original para leitura
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath));
-                FileWriter writer = new FileWriter(newPathSreadSheet)) {
+        try (FileWriter writer = new FileWriter(newPathSreadSheet)) {
 
-            // Lê cada linha do arquivo original
-            String line;
-            int rowIndex = newColumnValues.size() - 1; // Para acompanhar o índice da linha e acessar o valor correspondente em newColumnValues
-            while ((line = br.readLine()) != null) {
-                // Escreve a linha original no novo arquivo
-                writer.write(line);
+            // Verifica se as listas são válidas e têm o mesmo tamanho
+            if (transactions != null && operations != null && transactions.size() == transactions.size()) {
 
-                // Adiciona a vírgula e o valor da nova coluna
-                writer.write("," + newColumnValues.get(rowIndex));
-                writer.write(System.lineSeparator());
+                int newColumnIndex = newColumnValues.size() - 1;
+                for (int i = 0; i < transactions.size(); i++) {
+                    writer.write(transactions.get(i) + "," + operations.get(i) + "," + points.get(i) + "," + newColumnValues.get(newColumnIndex));
+                    writer.write(System.lineSeparator());
+                    newColumnIndex--;
+                }
 
-                rowIndex--;
+                JOptionPane.showMessageDialog(null, "Criado novo arquivo CSV!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro: Problema ao ler colunas do arquivo CSV.");
             }
         }
-        JOptionPane.showMessageDialog(null, "Criado novo arquivo CSV com a nova coluna acumulo!");
     }
 
     private void writeXlsOrXlsx(String filePath, FileInputStream inputStream, Workbook workbook, List<Double> newColumnValues) throws FileNotFoundException, IOException {
