@@ -50,6 +50,7 @@ public class Result extends javax.swing.JDialog {
         if (listAcumulate.get(0) == 0) {
             textReasons.setText("Saldo já está zerado");
             textActions.setText("Nenhuma ação necessária");
+            textFor.setText("Nenhuma ação necessária");
             textTransactions.setText("Saldo já está zerado");
             textFile500.setText("Saldo já está zerado");
             textCurrentylBalance.setText(listAcumulate.get(0).toString());
@@ -57,6 +58,7 @@ public class Result extends javax.swing.JDialog {
         } else if (listAcumulate.get(0) > 0) {
             textReasons.setText("Saldo já é positivo");
             textActions.setText("Nenhuma ação necessária");
+            textFor.setText("Nenhuma ação necessária");
             textTransactions.setText("Saldo já é positivo");
             textFile500.setText("Saldo já é positivo");
             textCurrentylBalance.setText(listAcumulate.get(0).toString());
@@ -77,7 +79,8 @@ public class Result extends javax.swing.JDialog {
 
                 for (ResultField result : results) {
                     uniqueOperations.add(result.getOperation());
-                    if(result.getOperation().equals("EXPIRAÇÃO")){
+                    if(result.getOperation().equals("EXPIRAÇÃO")
+                        || result.getOperation().equals("VENCIMENTO")){
                         transactions.append(result.getTransaction()).append(", ");
                         sumExpiredPoints += (result.getPoint() * -1);
                     }
@@ -99,19 +102,20 @@ public class Result extends javax.swing.JDialog {
 
                 textTransactions.setText(transactions.toString());
                 textReasons.setText(operations.toString());
-                if (uniqueOperations.size() == 1 && uniqueOperations.contains("EXPIRAÇÃO")){
-                    textActions.setText("Reverter as transações abaixo");
+                textActions.setText("Abrir um chamado para o time de operações");
+                if (uniqueOperations.size() == 1 && uniqueOperations.contains("EXPIRAÇÃO") || uniqueOperations.contains("VENCIMENTO")){
+                    textFor.setText("Reverter as transações abaixo");
                     textFile500.setText("Não se aplica");
                     newBalance = sumExpiredPoints + listAcumulate.get(0);
                     textNewBalance.setText(newBalance.toString());
-                } else if(uniqueOperations.size() > 1 && uniqueOperations.contains("EXPIRAÇÃO")) {
-                    textActions.setText("Reverter as transações abaixo e fazer arquivo 500");
+                } else if(uniqueOperations.size() > 1 && uniqueOperations.contains("EXPIRAÇÃO") || uniqueOperations.contains("VENCIMENTO")) {
+                    textFor.setText("Reverter as transações abaixo e enviar arquivo 500 para processar e bonificar o cliente");
                     file500 = listAcumulate.get(0) - (sumExpiredPoints + listAcumulate.get(0));
                     textFile500.setText(file500.toString());
                     newBalance = sumExpiredPoints + file500 + listAcumulate.get(0);
                     textNewBalance.setText(newBalance.toString());
                 } else {
-                    textActions.setText("Fazer arquivo 500 para bonificar o cliente");
+                    textFor.setText("Enviar arquivo 500 com o valor informado para processar e bonificar o cliente");
                     file500 = listAcumulate.get(0) * -1;
                     textFile500.setText(file500.toString());
                     textTransactions.setText("Não se aplica");
@@ -139,9 +143,11 @@ public class Result extends javax.swing.JDialog {
         separator1 = new javax.swing.JSeparator();
         labelActionTitle = new javax.swing.JLabel();
         labelActions = new javax.swing.JLabel();
+        labelFor = new javax.swing.JLabel();
         labelTransactions = new javax.swing.JLabel();
         labelFile500 = new javax.swing.JLabel();
         textActions = new javax.swing.JTextField();
+        textFor = new javax.swing.JTextField();
         textTransactions = new javax.swing.JTextField();
         textFile500 = new javax.swing.JTextField();
         separator2 = new javax.swing.JSeparator();
@@ -165,11 +171,15 @@ public class Result extends javax.swing.JDialog {
 
         labelActions.setText("Ações:");
 
+        labelFor.setText("Para que:");
+
         labelTransactions.setText("Transações:");
 
         labelFile500.setText("Bonificar Em:");
 
         textActions.setEditable(false);
+
+        textFor.setEditable(false);
 
         textTransactions.setEditable(false);
 
@@ -192,47 +202,50 @@ public class Result extends javax.swing.JDialog {
             .addComponent(separator1)
             .addComponent(separator2)
             .addGroup(layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(labelReasons)
-                .addGap(18, 18, 18)
-                .addComponent(textReasons)
-                .addGap(39, 39, 39))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(labelCurrentlyBalance))
+                        .addGap(72, 72, 72)
+                        .addComponent(labelReasons)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textReasons, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(labelNewBalance)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textCurrentylBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textNewBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelNewBalance)
+                            .addComponent(labelCurrentlyBalance))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(textCurrentylBalance, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
+                            .addComponent(textNewBalance))))
                 .addContainerGap(42, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelActions, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(labelFile500, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(labelTransactions, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(labelTransactions, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelFor, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelActions, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(textFile500, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
-                            .addComponent(textActions)
-                            .addComponent(textTransactions, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(textFile500)
+                            .addComponent(textTransactions, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(textFor)
+                            .addComponent(textActions, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(40, 40, 40))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(labelReasonsTitle)
-                        .addGap(166, 166, 166))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(labelActionTitle)
-                        .addGap(181, 181, 181))
+                        .addGap(232, 232, 232))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(labelReasonsTitle)
+                        .addGap(217, 217, 217))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(labelBalanceTitle)
-                        .addGap(229, 229, 229))))
+                        .addGap(267, 267, 267))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,8 +262,12 @@ public class Result extends javax.swing.JDialog {
                 .addComponent(labelActionTitle)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelActions))
+                    .addComponent(labelActions)
+                    .addComponent(textActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelFor)
+                    .addComponent(textFor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textTransactions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -271,7 +288,7 @@ public class Result extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textNewBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelNewBalance))
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
@@ -326,6 +343,7 @@ public class Result extends javax.swing.JDialog {
     private javax.swing.JLabel labelBalanceTitle;
     private javax.swing.JLabel labelCurrentlyBalance;
     private javax.swing.JLabel labelFile500;
+    private javax.swing.JLabel labelFor;
     private javax.swing.JLabel labelNewBalance;
     private javax.swing.JLabel labelReasons;
     private javax.swing.JLabel labelReasonsTitle;
@@ -335,6 +353,7 @@ public class Result extends javax.swing.JDialog {
     private javax.swing.JTextField textActions;
     private javax.swing.JTextField textCurrentylBalance;
     private javax.swing.JTextField textFile500;
+    private javax.swing.JTextField textFor;
     private javax.swing.JTextField textNewBalance;
     private javax.swing.JTextField textReasons;
     private javax.swing.JTextField textTransactions;

@@ -37,10 +37,11 @@ public class Validation {
             boolean hasRefund = false;
             for (int i = indexNegativeValueFound - 1; i >= 0; i--) { // Começa ddo próximo índice após encontrar o negativo
                 // Verifica se houve algum estorno do valor negativo encontrado
-                if (operations.get(i).equals("ESTORNO DE CRÉDITO")
+                if (points.get(i) == (points.get(indexNegativeValueFound) * -1)
+                        && operations.get(i).equals("ESTORNO DE CRÉDITO")
                         || operations.get(i).equals("ESTORNO DE EXPIRAÇÃO")
                         || operations.get(i).equals("ESTORNO DE VENCIMENTO")
-                        && points.get(i) == (points.get(indexNegativeValueFound) * -1)) {
+                        ) {
                     hasRefund = true;
                     index = i - 1;
                     break;

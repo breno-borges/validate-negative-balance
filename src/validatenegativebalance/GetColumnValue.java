@@ -48,7 +48,9 @@ public class GetColumnValue {
 
     public static List<String> getColumnOperacaoValues(String filePath) throws FileNotFoundException, IOException {
         List<String> operations;
-        if (filePath.endsWith(".csv")) {
+        if (filePath.endsWith("processado.csv")) {
+            operations = getColumnTextsValueCSV(filePath, 1);
+        } else if (filePath.endsWith("csv")) {
             operations = getColumnTextsValueCSV(filePath, 6);
         } else {
             // Carrega a planilha do Excel
@@ -72,7 +74,9 @@ public class GetColumnValue {
 
     public static List<Double> getColumnTransacaoValues(String filePath) throws FileNotFoundException, IOException {
         List<Double> transactions;
-        if (filePath.endsWith(".csv")) {
+        if (filePath.endsWith("processado.csv")) {
+            transactions = getColumnNumericsValueCSV(filePath, 0);
+        } else if (filePath.endsWith(".csv")) {
             transactions = getColumnNumericsValueCSV(filePath, 1);
         } else {
             // Carrega a planilha do Excel
@@ -95,7 +99,9 @@ public class GetColumnValue {
 
     public static List<Double> getColumnPointsValues(String filePath) throws FileNotFoundException, IOException {
         List<Double> points;
-        if (filePath.endsWith(".csv")) {
+        if (filePath.endsWith("processado.csv")) {
+            points = getColumnNumericsValueCSV(filePath, 2);
+        } else if (filePath.endsWith(".csv")) {
             points = getColumnNumericsValueCSV(filePath, 7);
         } else {
             // Carrega a planilha do Excel

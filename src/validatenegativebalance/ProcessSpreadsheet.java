@@ -72,6 +72,21 @@ public class ProcessSpreadsheet {
         List<Double> points = GetColumnValue.getColumnPointsValues(filePath);
         List<Double> newColumnValues = calculatePointsToNewColumn(points);
         
+        for(int i = operations.size() - 1; i >= 0; i--){
+            if(operations.get(i).equals("CR�DITO")){
+                operations.set(i, "CRÉDITO");
+            }
+            if(operations.get(i).equals("TRANSFER�NCIA")){
+                operations.set(i, "TRANSFERÊNCIA");
+            }
+            if(operations.get(i).equals("ESTORNO DE CR�DITO")){
+                operations.set(i, "ESTORNO DE CRÉDITO");
+            }
+            if(operations.get(i).equals("ESTORNO DE EXPIRA��O")){
+                operations.set(i, "ESTORNO DE EXPIRAÇÃO");
+            }
+        }
+        
         // Abre o arquivo original para leitura
         try (FileWriter writer = new FileWriter(newPathSreadSheet)) {
 
