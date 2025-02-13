@@ -47,6 +47,14 @@ public class Result extends javax.swing.JDialog {
     private void result() throws IOException {
         List<Double> listAcumulate = GetColumnValue.getColumnAcumuloValues(filePath);
 
+        int lastIndex = filePath.lastIndexOf("\\");
+        if (lastIndex != -1) {
+            String fileName = filePath.substring(lastIndex + 1);
+            labelFilePath.setText(fileName);
+        } else {
+            System.out.println(filePath);
+        }
+        
         if (listAcumulate.get(0) == 0) {
             textReasons.setText("Saldo já está zerado");
             textActions.setText("Nenhuma ação necessária");
@@ -79,8 +87,8 @@ public class Result extends javax.swing.JDialog {
 
                 for (ResultField result : results) {
                     uniqueOperations.add(result.getOperation());
-                    if(result.getOperation().equals("EXPIRAÇÃO")
-                        || result.getOperation().equals("VENCIMENTO")){
+                    if (result.getOperation().equals("EXPIRAÇÃO")
+                            || result.getOperation().equals("VENCIMENTO")) {
                         transactions.append(result.getTransaction()).append(", ");
                         sumExpiredPoints += (result.getPoint() * -1);
                     }
@@ -103,12 +111,12 @@ public class Result extends javax.swing.JDialog {
                 textTransactions.setText(transactions.toString());
                 textReasons.setText(operations.toString());
                 textActions.setText("Abrir um chamado para o time de operações");
-                if (uniqueOperations.size() == 1 && uniqueOperations.contains("EXPIRAÇÃO") || uniqueOperations.contains("VENCIMENTO")){
+                if (uniqueOperations.size() == 1 && uniqueOperations.contains("EXPIRAÇÃO") || uniqueOperations.contains("VENCIMENTO")) {
                     textFor.setText("Reverter as transações abaixo");
                     textFile500.setText("Não se aplica");
                     newBalance = sumExpiredPoints + listAcumulate.get(0);
                     textNewBalance.setText(newBalance.toString());
-                } else if(uniqueOperations.size() > 1 && uniqueOperations.contains("EXPIRAÇÃO") || uniqueOperations.contains("VENCIMENTO")) {
+                } else if (uniqueOperations.size() > 1 && uniqueOperations.contains("EXPIRAÇÃO") || uniqueOperations.contains("VENCIMENTO")) {
                     textFor.setText("Reverter as transações abaixo e enviar arquivo 500 para processar e bonificar o cliente");
                     file500 = listAcumulate.get(0) - (sumExpiredPoints + listAcumulate.get(0));
                     textFile500.setText(file500.toString());
@@ -122,7 +130,7 @@ public class Result extends javax.swing.JDialog {
                     newBalance = file500 + listAcumulate.get(0);
                     textNewBalance.setText(newBalance.toString());
                 }
-                
+
                 textCurrentylBalance.setText(listAcumulate.get(0).toString());
             }
         }
@@ -156,6 +164,8 @@ public class Result extends javax.swing.JDialog {
         labelNewBalance = new javax.swing.JLabel();
         textCurrentylBalance = new javax.swing.JTextField();
         textNewBalance = new javax.swing.JTextField();
+        labelFile = new javax.swing.JLabel();
+        labelFilePath = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Validação");
@@ -195,6 +205,8 @@ public class Result extends javax.swing.JDialog {
 
         textNewBalance.setEditable(false);
 
+        labelFile.setText("Arquivo Analisado:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -212,11 +224,13 @@ public class Result extends javax.swing.JDialog {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(labelNewBalance)
-                            .addComponent(labelCurrentlyBalance))
+                            .addComponent(labelCurrentlyBalance)
+                            .addComponent(labelFile))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(textCurrentylBalance, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE)
-                            .addComponent(textNewBalance))))
+                            .addComponent(textNewBalance)
+                            .addComponent(labelFilePath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(42, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -288,7 +302,11 @@ public class Result extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textNewBalance, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelNewBalance))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelFile)
+                    .addComponent(labelFilePath))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         pack();
@@ -342,7 +360,9 @@ public class Result extends javax.swing.JDialog {
     private javax.swing.JLabel labelActions;
     private javax.swing.JLabel labelBalanceTitle;
     private javax.swing.JLabel labelCurrentlyBalance;
+    private javax.swing.JLabel labelFile;
     private javax.swing.JLabel labelFile500;
+    private javax.swing.JLabel labelFilePath;
     private javax.swing.JLabel labelFor;
     private javax.swing.JLabel labelNewBalance;
     private javax.swing.JLabel labelReasons;
