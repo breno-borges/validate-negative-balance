@@ -144,11 +144,14 @@ public class GetColumnValue {
                                     || valueString.equalsIgnoreCase("TRANSFERÊNCIA")
                                     || valueString.equalsIgnoreCase("ESTORNO DE CRÉDITO")
                                     || valueString.equalsIgnoreCase("ESTORNO DE EXPIRAÇÃO")
-                                    || valueString.equalsIgnoreCase("ESTORNO DE VENCIMENTO")) {
+                                    || valueString.equalsIgnoreCase("ESTORNO DE VENCIMENTO")
+                                    || valueString.equalsIgnoreCase("CR�DITO")
+                                    || valueString.equalsIgnoreCase("TRANSFER�NCIA")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE CR�DITO")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE EXPIRA��O")){
                                 valueString = valuesSplit[index + 1].trim().replace("\"", "");
                                 value = Double.parseDouble(valueString);
                             } else {
-                                valueString = valuesSplit[index].trim().replace("\"", "");
                                 value = Double.parseDouble(valueString);
                             }
                         } else if(index == 1) {
@@ -159,7 +162,21 @@ public class GetColumnValue {
                         } else {
                             // Remove as aspas duplas antes da conversão
                             valueString = valuesSplit[index].trim().replace("\"", "");
-                            value = Double.parseDouble(valueString);
+                            if (valueString.equalsIgnoreCase("TROCA")
+                                    || valueString.equalsIgnoreCase("CRÉDITO")
+                                    || valueString.equalsIgnoreCase("TRANSFERÊNCIA")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE CRÉDITO")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE EXPIRAÇÃO")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE VENCIMENTO")
+                                    || valueString.equalsIgnoreCase("CR�DITO")
+                                    || valueString.equalsIgnoreCase("TRANSFER�NCIA")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE CR�DITO")
+                                    || valueString.equalsIgnoreCase("ESTORNO DE EXPIRA��O")) {
+                                valueString = valuesSplit[index + 1].trim().replace("\"", "");
+                                value = Double.parseDouble(valueString);
+                            } else {
+                                value = Double.parseDouble(valueString);
+                            }
                         }
                         values.add(value);
                     } catch (NumberFormatException e) {

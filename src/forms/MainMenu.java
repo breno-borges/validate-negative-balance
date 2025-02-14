@@ -21,14 +21,9 @@ public class MainMenu extends javax.swing.JFrame {
      * Creates new form MainMenu
      */
     public MainMenu() {
-        if(!init){
-            JOptionPane.showMessageDialog(null, "Clique em Sobre para verificar os passos para utilização da aplicação");
-            initComponents();
-            this.init = true;
-        }
+        initComponents();
     }
-    
-    private boolean init = false;
+
     private String path;
     private File file;
     private int fileChoosed;
@@ -133,7 +128,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         fileMenu.setText("Arquivo");
 
-        exitMenuItem.setText("Exit");
+        exitMenuItem.setText("Sair");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
