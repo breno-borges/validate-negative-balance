@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -125,7 +126,7 @@ public class GetColumnValue {
 
     private static List<Double> getColumnNumericsValueCSV(String filePath, int index) throws FileNotFoundException, IOException {
         List<Double> values = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"))) {
             String line;
             String valueString;
             double value = 0.0;
@@ -193,7 +194,7 @@ public class GetColumnValue {
 
     private static List<String> getColumnTextsValueCSV(String filePath, int index) throws FileNotFoundException, IOException {
         List<String> values = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), "UTF-8"))) {
             String line;
             String valueString;
             while ((line = br.readLine()) != null) {
